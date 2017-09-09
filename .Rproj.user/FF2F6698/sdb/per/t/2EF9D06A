@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "# k-Fold Cross Validation\n\n# Importing the dataset\ndataset = read.csv('Social_Network_Ads.csv')\ndataset = dataset[3:5]\n\n# Encoding the target feature as factor\ndataset$Purchased = factor(dataset$Purchased, levels = c(0, 1))\n\n# Splitting the dataset into the Training set and Test set\n# install.packages('caTools')\nlibrary(caTools)\nset.seed(123)\nsplit = sample.split(dataset$Purchased, SplitRatio = 0.75)\ntraining_set = subset(dataset, split == TRUE)\ntest_set = subset(dataset, split == FALSE)\n\n# Feature Scaling\ntraining_set[-3] = scale(training_set[-3])\ntest_set[-3] = scale(test_set[-3])\n\n# Fitting Kernel SVM to the Training set\n# install.packages('e1071')\nlibrary(e1071)\nclassifier = svm(formula = Purchased ~ .,\n                 data = training_set,\n                 type = 'C-classification',\n                 kernel = 'radial')\n\n# Predicting the Test set results\ny_pred = predict(classifier, newdata = test_set[-3])\n\n# Making the Confusion Matrix\ncm = table(test_set[, 3], y_pred)\n\n# Applying k-Fold Cross Validation\n# install.packages('caret')\nlibrary(caret)\nfolds = createFolds(training_set$Purchased, k = 10)\ncv = lapply(folds, function(x) {\n  training_fold = training_set[-x, ]\n  test_fold = training_set[x, ]\n  classifier = svm(formula = Purchased ~ .,\n                   data = training_fold,\n                   type = 'C-classification',\n                   kernel = 'radial')\n  y_pred = predict(classifier, newdata = test_fold[-3])\n  cm = table(test_fold[, 3], y_pred)\n  accuracy = (cm[1,1] + cm[2,2]) / (cm[1,1] + cm[2,2] + cm[1,2] + cm[2,1])\n  return(accuracy)\n})\naccuracy = mean(as.numeric(cv))\n\n# Visualising the Training set results\nlibrary(ElemStatLearn)\nset = training_set\nX1 = seq(min(set[, 1]) - 1, max(set[, 1]) + 1, by = 0.01)\nX2 = seq(min(set[, 2]) - 1, max(set[, 2]) + 1, by = 0.01)\ngrid_set = expand.grid(X1, X2)\ncolnames(grid_set) = c('Age', 'EstimatedSalary')\ny_grid = predict(classifier, newdata = grid_set)\nplot(set[, -3],\n     main = 'Kernel SVM (Training set)',\n     xlab = 'Age', ylab = 'Estimated Salary',\n     xlim = range(X1), ylim = range(X2))\ncontour(X1, X2, matrix(as.numeric(y_grid), length(X1), length(X2)), add = TRUE)\npoints(grid_set, pch = '.', col = ifelse(y_grid == 1, 'springgreen3', 'tomato'))\npoints(set, pch = 21, bg = ifelse(set[, 3] == 1, 'green4', 'red3'))\n\n# Visualising the Test set results\nlibrary(ElemStatLearn)\nset = test_set\nX1 = seq(min(set[, 1]) - 1, max(set[, 1]) + 1, by = 0.01)\nX2 = seq(min(set[, 2]) - 1, max(set[, 2]) + 1, by = 0.01)\ngrid_set = expand.grid(X1, X2)\ncolnames(grid_set) = c('Age', 'EstimatedSalary')\ny_grid = predict(classifier, newdata = grid_set)\nplot(set[, -3], main = 'Kernel SVM (Test set)',\n     xlab = 'Age', ylab = 'Estimated Salary',\n     xlim = range(X1), ylim = range(X2))\ncontour(X1, X2, matrix(as.numeric(y_grid), length(X1), length(X2)), add = TRUE)\npoints(grid_set, pch = '.', col = ifelse(y_grid == 1, 'springgreen3', 'tomato'))\npoints(set, pch = 21, bg = ifelse(set[, 3] == 1, 'green4', 'red3'))",
+    "created" : 1502300413400.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4004565932",
+    "id" : "2EF9D06A",
+    "lastKnownWriteTime" : 1485680986,
+    "last_content_update" : 1485680986,
+    "path" : "C:/Users/jwan/Google Drive/trunk/Coding/Udemy/Machine-Learning-A-Z/Part 10 - Model Selection & Boosting/Section 48 - Model Selection/k_fold_cross_validation.R",
+    "project_path" : "Part 10 - Model Selection & Boosting/Section 48 - Model Selection/k_fold_cross_validation.R",
+    "properties" : {
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
