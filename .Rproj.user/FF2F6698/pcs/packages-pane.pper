@@ -1,7 +1,0 @@
-{
-    "installOptions" : {
-        "installDependencies" : true,
-        "installFromRepository" : true,
-        "libraryPath" : "C:/Anaconda3/envs/python36-with-r/R/library"
-    }
-}
