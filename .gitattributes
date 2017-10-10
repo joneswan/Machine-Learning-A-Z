@@ -21,3 +21,7 @@
 *.jpg binary
 *.gif binary
 *.mp4
+
+# Declare files that will always have LF line endings on checkout.
+.gitignore text eol=lf
+.gitattributes text eol=lf
