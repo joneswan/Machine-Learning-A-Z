@@ -16,12 +16,12 @@ git rm -r --cached ./.Rproj.user/
 git rm -r --cached ./Machine-Learning-A-Z.Rproj
 
 # Update .gitignore ()
-./Part\ 8\ -\ Deep\ Learning/Section\ 40\ -\ Convolutional\ Neural\ Networks\ \(CNN\)/dataset/
-./.RData
-./.Rhistory
-./.spyproject/
-./.Rproj.user/
-./Machine-Learning-A-Z.Rproj
+Part\ 8\ -\ Deep\ Learning/Section\ 40\ -\ Convolutional\ Neural\ Networks\ \(CNN\)/dataset/*
+.RData
+.Rhistory
+.spyproject/*
+.Rproj.user/*
+Machine-Learning-A-Z.Rproj
 
 # Commit
 git commit -am "Remove ignored files"
